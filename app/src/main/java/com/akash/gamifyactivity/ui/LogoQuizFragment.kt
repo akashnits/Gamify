@@ -46,11 +46,11 @@ class LogoQuizFragment : Fragment() {
             etAns.text.clear()
 
             result?.let {
-                if(it) {
+                if (it) {
                     Toast.makeText(context, "$result", Toast.LENGTH_SHORT).show()
                     // show next question
                     showNextQuestion()
-                }else{
+                } else {
                     // ask to try again
                     Toast.makeText(context, "Incorrect: Pls try again", Toast.LENGTH_SHORT).show()
                 }
@@ -67,11 +67,15 @@ class LogoQuizFragment : Fragment() {
         (activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem ?: showNextQuestion()
     }
 
-    private fun showNextQuestion(){
+    private fun showNextQuestion() {
         (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
             // load random quiz
             val logoItem = (activity as? LogoQuizActivity)?.logoQuizViewModel?.getRandomQuestion()
-            loadIntoImageView(logoItem)
+            if (logoItem == null) {
+                Toast.makeText(context, "You're all set!", Toast.LENGTH_SHORT).show()
+            } else {
+                loadIntoImageView(logoItem)
+            }
         }
     }
 

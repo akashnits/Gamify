@@ -24,8 +24,9 @@ class LogoQuizViewModel @Inject constructor(
 
     fun getRandomQuestion(): LogoItem? {
         //get a random question
-        val logoItem = logoItems.value?.randomOrNull()
+        val logoItem = logoItems.value?.filter { !it.asked }?.randomOrNull()
         currentLogoItem = logoItem
+        currentLogoItem?.asked = true
         return logoItem
     }
 

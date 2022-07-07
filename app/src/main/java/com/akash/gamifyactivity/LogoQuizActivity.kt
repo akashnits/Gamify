@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.viewModels
 import com.akash.gamifyactivity.ui.WelcomeScreenFragment
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
