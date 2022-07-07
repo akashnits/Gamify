@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import com.akash.gamifyactivity.LogoQuizActivity
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
@@ -16,7 +19,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class LogoQuizFragment : Fragment() {
 
-    lateinit var imageView : ImageView
+    lateinit var imageView: ImageView
+    lateinit var submitBtn: Button
+    lateinit var etAns: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +31,20 @@ class LogoQuizFragment : Fragment() {
         val binding = FragmentLogoQuizBinding.inflate(inflater, container, false)
 
         imageView = binding.ivLogo
+        submitBtn = binding.btnSubmit
+        etAns = binding.etAnswer
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        submitBtn.setOnClickListener {
+            val result = (activity as? LogoQuizActivity)?.logoQuizViewModel?.isValidAnswer(
+                etAns.text.trim().toString()
+            )
+            Toast.makeText(context, "Ans is: ${result}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -39,7 +57,7 @@ class LogoQuizFragment : Fragment() {
         }
     }
 
-    private fun loadIntoImageView(logoItem : LogoItem?){
+    private fun loadIntoImageView(logoItem: LogoItem?) {
         Glide.with(imageView.context)
             .load(logoItem?.imgUrl)
             .transition(DrawableTransitionOptions.withCrossFade())

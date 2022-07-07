@@ -14,6 +14,7 @@ class LogoQuizViewModel @Inject constructor(
 ) : ViewModel() {
 
     var logoItems: LiveData<List<LogoItem>?> = MutableLiveData()
+    var logoName: String? = null
 
     fun loadQuizFromAsset(assetManager: AssetManager?) {
         viewModelScope.launch {
@@ -22,8 +23,14 @@ class LogoQuizViewModel @Inject constructor(
     }
 
     fun getRandomQuestion(): LogoItem? {
-        return logoItems.value?.randomOrNull()
+        //get a random question
+        val logoItem = logoItems.value?.randomOrNull()
+        logoName = logoItem?.name
+        return logoItem
     }
 
+    fun isValidAnswer(ans: String): Boolean {
+        return ans.equals(logoName, ignoreCase = true)
+    }
 
 }
