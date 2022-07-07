@@ -43,13 +43,28 @@ class LogoQuizFragment : Fragment() {
             val result = (activity as? LogoQuizActivity)?.logoQuizViewModel?.isValidAnswer(
                 etAns.text.trim().toString()
             )
-            Toast.makeText(context, "Ans is: ${result}", Toast.LENGTH_SHORT).show()
+            etAns.text.clear()
+
+            result?.let {
+                if(it) {
+                    Toast.makeText(context, "$result", Toast.LENGTH_SHORT).show()
+                    // show next question
+                    showNextQuestion()
+                }else{
+                    // ask to try again
+                    Toast.makeText(context, "Incorrect: Pls try again", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
     }
 
     override fun onResume() {
         super.onResume()
+        showNextQuestion()
+    }
 
+    private fun showNextQuestion(){
         (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
             // load random quiz
             val logoItem = (activity as? LogoQuizActivity)?.logoQuizViewModel?.getRandomQuestion()
