@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.R
-import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
+import com.akash.gamifyactivity.databinding.FragmentWelcomeScreenBinding
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
 import javax.inject.Inject
@@ -25,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [LogoQuizFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LogoQuizFragment : Fragment() {
+class WelcomeScreenFragment : Fragment() {
 
     @Inject
     lateinit var logoQuizViewModelFactory: LogoQuizViewModelFactory
@@ -34,17 +35,20 @@ class LogoQuizFragment : Fragment() {
         logoQuizViewModelFactory
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logoQuizViewModel.loadQuizFromAsset(context?.assets)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val binding = FragmentLogoQuizBinding.inflate(inflater, container, false)
 
+        val binding = FragmentWelcomeScreenBinding.inflate(inflater, container, false)
+
+        binding.button.setOnClickListener { navigateToLogoQuizFragment() }
         return binding.root
     }
 
@@ -53,14 +57,11 @@ class LogoQuizFragment : Fragment() {
         (activity?.application as LogoQuizApplication).appComponent.injectFragment(this)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LogoQuizFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun navigateToLogoQuizFragment() {
+        val manager: FragmentManager? = activity?.supportFragmentManager
+        val fragment = LogoQuizFragment()
+        val transaction: FragmentTransaction? = manager?.beginTransaction()
+        transaction?.replace(R.id.container, fragment)?.addToBackStack(null)
+        transaction?.commit()
     }
 }

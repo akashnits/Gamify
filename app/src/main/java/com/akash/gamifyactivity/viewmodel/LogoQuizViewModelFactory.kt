@@ -11,12 +11,11 @@ import javax.inject.Singleton
 
 @Singleton
 class LogoQuizViewModelFactory @Inject constructor(
-    private val logoRepository: LogoRepository,
-    private val application: Context
+    private val logoRepository: LogoRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return LogoQuizViewModel(logoRepository, application) as T
+        return LogoQuizViewModel(logoRepository) as T
     }
 }
