@@ -18,16 +18,6 @@ import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
 import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LogoQuizFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class WelcomeScreenFragment : Fragment() {
 
     override fun onCreateView(

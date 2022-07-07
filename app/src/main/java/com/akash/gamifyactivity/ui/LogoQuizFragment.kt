@@ -6,17 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
+import android.widget.ImageView
 import com.akash.gamifyactivity.LogoQuizActivity
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
-import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
-import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
-import javax.inject.Inject
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class LogoQuizFragment : Fragment() {
 
+    lateinit var imageView : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,20 +24,18 @@ class LogoQuizFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = FragmentLogoQuizBinding.inflate(inflater, container, false)
 
+        imageView = binding.ivLogo
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        Toast.makeText(context, "Toasting", Toast.LENGTH_SHORT).show()
+
         (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
-            logoItems?.forEach {
-                Toast.makeText(
-                    context,
-                    "LogoItem name is: ${it.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            Glide.with(imageView.context)
+                .load(logoItems?.first()?.imgUrl)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageView)
         }
     }
 
