@@ -61,7 +61,10 @@ class LogoQuizFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        showNextQuestion()
+        (activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem?.let {
+            loadIntoImageView((activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem)
+        }
+        (activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem ?: showNextQuestion()
     }
 
     private fun showNextQuestion(){
