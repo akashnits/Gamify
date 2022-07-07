@@ -10,6 +10,7 @@ import android.widget.ImageView
 import com.akash.gamifyactivity.LogoQuizActivity
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
+import com.akash.gamifyactivity.model.LogoItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
@@ -32,11 +33,17 @@ class LogoQuizFragment : Fragment() {
         super.onResume()
 
         (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
-            Glide.with(imageView.context)
-                .load(logoItems?.first()?.imgUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageView)
+            // load random quiz
+            val logoItem = (activity as? LogoQuizActivity)?.logoQuizViewModel?.getRandomQuestion()
+            loadIntoImageView(logoItem)
         }
+    }
+
+    private fun loadIntoImageView(logoItem : LogoItem?){
+        Glide.with(imageView.context)
+            .load(logoItem?.imgUrl)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(imageView)
     }
 
     override fun onAttach(context: Context) {

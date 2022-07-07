@@ -21,7 +21,7 @@ class LogoQuizViewModel @Inject constructor(
         }
     }
 
-    fun getNextQuestion(): LogoItem? {
+    fun getRandomQuestion(): LogoItem? {
         return logoItems.value?.randomOrNull()
     }
 
