@@ -6,37 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.akash.gamifyactivity.LogoQuizActivity
 import com.akash.gamifyactivity.LogoQuizApplication
-import com.akash.gamifyactivity.R
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
 import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
 import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LogoQuizFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LogoQuizFragment : Fragment() {
 
-    @Inject
-    lateinit var logoQuizViewModelFactory: LogoQuizViewModelFactory
-
-    private val logoQuizViewModel: LogoQuizViewModel by viewModels {
-        logoQuizViewModelFactory
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,19 +28,22 @@ class LogoQuizFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(context, "Toasting", Toast.LENGTH_SHORT).show()
+        (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
+            logoItems?.forEach {
+                Toast.makeText(
+                    context,
+                    "LogoItem name is: ${it.name}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity?.application as LogoQuizApplication).appComponent.injectFragment(this)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LogoQuizFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

@@ -1,5 +1,6 @@
 package com.akash.gamifyactivity.ui
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import com.akash.gamifyactivity.LogoQuizActivity
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.R
 import com.akash.gamifyactivity.databinding.FragmentWelcomeScreenBinding
@@ -28,19 +30,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class WelcomeScreenFragment : Fragment() {
 
-    @Inject
-    lateinit var logoQuizViewModelFactory: LogoQuizViewModelFactory
-
-    private val logoQuizViewModel: LogoQuizViewModel by viewModels {
-        logoQuizViewModelFactory
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        logoQuizViewModel.loadQuizFromAsset(context?.assets)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,6 +43,7 @@ class WelcomeScreenFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        (activity as? LogoQuizActivity)?.logoQuizViewModel?.loadQuizFromAsset(context.assets)
         (activity?.application as LogoQuizApplication).appComponent.injectFragment(this)
     }
 
