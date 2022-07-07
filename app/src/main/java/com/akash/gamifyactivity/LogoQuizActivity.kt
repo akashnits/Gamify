@@ -12,13 +12,6 @@ import javax.inject.Inject
 
 class LogoQuizActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var logoQuizViewModelFactory: LogoQuizViewModelFactory
-
-    val logoQuizViewModel: LogoQuizViewModel by viewModels {
-        logoQuizViewModelFactory
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as LogoQuizApplication).appComponent.injectActivity(this)
         super.onCreate(savedInstanceState)

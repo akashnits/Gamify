@@ -31,12 +31,6 @@ class WelcomeScreenFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity as? LogoQuizActivity)?.logoQuizViewModel?.loadQuizFromAsset(context.assets)
-        (activity?.application as LogoQuizApplication).appComponent.injectFragment(this)
-    }
-
     private fun navigateToLogoQuizFragment() {
         val manager: FragmentManager? = activity?.supportFragmentManager
         val fragment = LogoQuizFragment()

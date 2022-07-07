@@ -10,11 +10,16 @@ import javax.inject.Singleton
 
 @Singleton
 class LogoQuizViewModel @Inject constructor(
-    private val logoRepository: LogoRepository
+    private val logoRepository: LogoRepository,
+    private val assetManager: AssetManager?
 ) : ViewModel() {
 
     var logoItems: LiveData<List<LogoItem>?> = MutableLiveData()
     var currentLogoItem : LogoItem? = null
+
+    init {
+        loadQuizFromAsset(assetManager)
+    }
 
     fun loadQuizFromAsset(assetManager: AssetManager?) {
         viewModelScope.launch {

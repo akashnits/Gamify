@@ -10,14 +10,24 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import com.akash.gamifyactivity.LogoQuizActivity
+import androidx.fragment.app.viewModels
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
 import com.akash.gamifyactivity.model.LogoItem
+import com.akash.gamifyactivity.viewmodel.LogoQuizViewModel
+import com.akash.gamifyactivity.viewmodel.LogoQuizViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import javax.inject.Inject
 
 class LogoQuizFragment : Fragment() {
+
+    @Inject
+    lateinit var logoQuizViewModelFactory: LogoQuizViewModelFactory
+
+    val logoQuizViewModel: LogoQuizViewModel by viewModels {
+        logoQuizViewModelFactory
+    }
 
     lateinit var imageView: ImageView
     lateinit var submitBtn: Button
@@ -40,12 +50,12 @@ class LogoQuizFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         submitBtn.setOnClickListener {
-            val result = (activity as? LogoQuizActivity)?.logoQuizViewModel?.isValidAnswer(
+            val result = logoQuizViewModel.isValidAnswer(
                 etAns.text.trim().toString()
             )
             etAns.text.clear()
 
-            result?.let {
+            result.let {
                 if (it) {
                     Toast.makeText(context, "$result", Toast.LENGTH_SHORT).show()
                     // show next question
@@ -61,16 +71,16 @@ class LogoQuizFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem?.let {
-            loadIntoImageView((activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem)
+        logoQuizViewModel.currentLogoItem?.let {
+            loadIntoImageView(logoQuizViewModel.currentLogoItem)
         }
-        (activity as? LogoQuizActivity)?.logoQuizViewModel?.currentLogoItem ?: showNextQuestion()
+        logoQuizViewModel.currentLogoItem ?: showNextQuestion()
     }
 
     private fun showNextQuestion() {
-        (activity as? LogoQuizActivity)?.logoQuizViewModel?.logoItems?.observe(viewLifecycleOwner) { logoItems ->
+        logoQuizViewModel.logoItems.observe(viewLifecycleOwner) { logoItems ->
             // load random quiz
-            val logoItem = (activity as? LogoQuizActivity)?.logoQuizViewModel?.getRandomQuestion()
+            val logoItem = logoQuizViewModel.getRandomQuestion()
             if (logoItem == null) {
                 Toast.makeText(context, "You're all set!", Toast.LENGTH_SHORT).show()
             } else {
