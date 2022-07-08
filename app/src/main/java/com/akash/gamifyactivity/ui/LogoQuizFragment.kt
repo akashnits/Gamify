@@ -1,15 +1,14 @@
 package com.akash.gamifyactivity.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.akash.gamifyactivity.LogoQuizApplication
 import com.akash.gamifyactivity.databinding.FragmentLogoQuizBinding
@@ -32,6 +31,7 @@ class LogoQuizFragment : Fragment() {
     lateinit var imageView: ImageView
     lateinit var submitBtn: Button
     lateinit var etAns: EditText
+    lateinit var tvCounter : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +43,7 @@ class LogoQuizFragment : Fragment() {
         imageView = binding.ivLogo
         submitBtn = binding.btnSubmit
         etAns = binding.etAnswer
+        tvCounter = binding.tvCounter
         return binding.root
     }
 
@@ -58,7 +59,8 @@ class LogoQuizFragment : Fragment() {
             result.let {
                 if (it) {
                     Toast.makeText(context, "$result", Toast.LENGTH_SHORT).show()
-                    // show next question
+                    logoQuizViewModel.stopTimer()
+                    // show next question showNextQuestion()
                     showNextQuestion()
                 } else {
                     // ask to try again
@@ -84,12 +86,22 @@ class LogoQuizFragment : Fragment() {
             if (logoItem == null) {
                 Toast.makeText(context, "You're all set!", Toast.LENGTH_SHORT).show()
             } else {
+                // start the timer
+                startTimer()
                 loadIntoImageView(logoItem)
             }
         }
     }
 
+    private fun startTimer(){
+        logoQuizViewModel.startTimer()
+    }
+
     private fun loadIntoImageView(logoItem: LogoItem?) {
+        logoQuizViewModel.timeElapsed.observe(viewLifecycleOwner){
+            timeElapsed -> tvCounter.text = timeElapsed
+        }
+
         Glide.with(imageView.context)
             .load(logoItem?.imgUrl)
             .transition(DrawableTransitionOptions.withCrossFade())
